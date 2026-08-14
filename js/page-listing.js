@@ -25,7 +25,6 @@ function startListingPage() {
   }
 
   bindPageEvents();
-  applyRoleVisibility(getSession().role);
   renderListing(listing);
 }
 

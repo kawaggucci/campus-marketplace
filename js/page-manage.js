@@ -17,7 +17,6 @@ function handlePageReady() {
 
 function startManagePage() {
   const session = getSession();
-  applyRoleVisibility(session.role);
 
   // Role check: this page belongs to members only.
   if (session.role !== 'member') {

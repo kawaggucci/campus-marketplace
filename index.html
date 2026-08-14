@@ -18,49 +18,43 @@
           <li data-role="moderator"><a href="moderator.html">Moderation</a></li>
         </ul>
       </nav>
+
+      <!-- Account area: a log in link for visitors, a menu with the role
+           switch and log out for everybody who is logged in. -->
+      <div class="account">
+        <a class="button button-secondary" href="login.html" data-role="visitor">Log in</a>
+
+        <div class="account-menu" data-role="member moderator">
+          <button type="button" class="account-button" id="account-toggle"
+                  aria-expanded="false" aria-controls="account-panel">
+            <span id="account-name">Account</span>
+            <span class="account-role" id="account-role"></span>
+          </button>
+
+          <div class="account-panel is-hidden" id="account-panel">
+            <div class="field">
+              <label for="role-switch">Current role</label>
+              <select id="role-switch">
+                <option value="visitor">Visitor</option>
+                <option value="member">Member</option>
+                <option value="moderator">Moderator</option>
+              </select>
+              <p class="field-hint">
+                In this demo every account may take any role. In a real product
+                the role would belong to the account.
+              </p>
+            </div>
+            <button type="button" class="button button-secondary" id="logout-button">Log out</button>
+          </div>
+        </div>
+      </div>
     </div>
   </header>
 
   <main class="container">
 
     <h1>Buy and sell on campus</h1>
-
-    <!-- Role switch. There is no real authentication, the chosen role is only
-         stored in localStorage and decides what the interface shows. -->
-    <section class="panel" aria-labelledby="session-heading">
-      <h2 id="session-heading">Who are you?</h2>
-      <p id="session-info"></p>
-
-      <form id="login-form" class="form-row" data-role="visitor" autocomplete="off" novalidate>
-        <div class="field">
-          <label for="username">Username</label>
-          <!-- autocomplete is off on purpose: this is a demo role switch, not a
-               real login, so the browser should not offer saved accounts here. -->
-          <input type="text" id="username" name="member-name" maxlength="20"
-                 autocomplete="off" placeholder="e.g. maria"
-                 aria-describedby="username-hint">
-          <p class="field-hint" id="username-hint">
-            Any name works. The demo listings belong to maria, jonas and aylin.
-          </p>
-          <p class="error-message" id="error-username" role="alert"></p>
-        </div>
-
-        <div class="field">
-          <label for="role">Log in as</label>
-          <select id="role" name="role">
-            <option value="member">Member</option>
-            <option value="moderator">Moderator</option>
-          </select>
-        </div>
-
-        <div class="field field-actions">
-          <button type="submit" class="button">Log in</button>
-        </div>
-      </form>
-
-      <button type="button" id="logout-button" class="button button-secondary"
-              data-role="member moderator">Log out</button>
-    </section>
+    <p id="session-info" class="page-intro"></p>
 
     <!-- Search and filter. Every change re-renders the list with JavaScript,
          the page is never reloaded. -->
@@ -130,6 +124,7 @@
   <script src="js/seed-data.js"></script>
   <script src="js/store.js"></script>
   <script src="js/ui.js"></script>
+  <script src="js/account.js"></script>
   <script src="js/page-index.js"></script>
 
 </body>

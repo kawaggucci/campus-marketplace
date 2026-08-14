@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Campus Marketplace - Moderation</title>
+  <title>Campus Marketplace - Log in</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -11,6 +11,7 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="index.html">🎓 Campus Marketplace</a>
+
       <nav class="main-nav" aria-label="Main navigation">
         <ul>
           <li><a href="index.html">Listings</a></li>
@@ -53,41 +54,51 @@
 
   <main class="container">
 
-    <h1>Moderation</h1>
+    <div class="narrow-page">
+      <h1>Log in</h1>
 
-    <!-- Shown to everybody who is not a logged in moderator. -->
-    <section class="panel is-hidden" id="moderators-only">
-      <h2>This area is for moderators</h2>
-      <p>Only a logged in moderator can review reported listings.</p>
-      <p><a class="button" href="index.html">Go to the listings and log in</a></p>
-    </section>
-
-    <div class="is-hidden" id="moderator-area">
-
-      <section class="panel" aria-labelledby="reported-heading">
-        <h2 id="reported-heading">Reported listings</h2>
+      <section class="panel" aria-labelledby="login-heading">
+        <h2 id="login-heading">Choose a name and a role</h2>
         <p class="field-hint">
-          Remove takes the listing off the public pages. Dismiss means the report
-          was not justified and the listing goes back online.
+          This is a demo login without passwords. The name and the role are
+          stored in the browser and decide what the interface shows.
         </p>
-        <ul class="row-list" id="reported-list"></ul>
-        <p class="empty-message is-hidden" id="reported-empty">
-          Nothing to review, no listing is reported at the moment.
-        </p>
+
+        <form id="login-form" autocomplete="off" novalidate>
+          <div class="field">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="member-name" maxlength="20"
+                   autocomplete="off" placeholder="e.g. maria"
+                   aria-describedby="username-hint">
+            <p class="field-hint" id="username-hint">
+              Any name works. The demo listings belong to maria, jonas and aylin.
+            </p>
+            <p class="error-message" id="error-username" role="alert"></p>
+          </div>
+
+          <div class="field">
+            <label for="role">Log in as</label>
+            <select id="role" name="role">
+              <option value="member">Member</option>
+              <option value="moderator">Moderator</option>
+            </select>
+            <p class="field-hint">You can change the role later in the menu at the top right.</p>
+          </div>
+
+          <div class="field-actions">
+            <button type="submit" class="button">Log in</button>
+            <a class="button button-secondary" href="index.html">Continue as visitor</a>
+          </div>
+        </form>
       </section>
 
-      <section class="panel" aria-labelledby="removed-heading">
-        <h2 id="removed-heading">Removed listings</h2>
-        <p class="field-hint">
-          These listings are not visible to users any more. The records stay in
-          the data, so the decision can be traced.
-        </p>
-        <ul class="row-list" id="removed-list"></ul>
-        <p class="empty-message is-hidden" id="removed-empty">
-          No listing has been removed yet.
+      <section class="panel is-hidden" id="already-logged-in" aria-labelledby="logged-in-heading">
+        <h2 id="logged-in-heading">You are already logged in</h2>
+        <p id="logged-in-info"></p>
+        <p class="field-actions">
+          <a class="button" href="index.html">Go to the listings</a>
         </p>
       </section>
-
     </div>
 
   </main>
@@ -106,7 +117,7 @@
   <script src="js/store.js"></script>
   <script src="js/ui.js"></script>
   <script src="js/account.js"></script>
-  <script src="js/page-moderator.js"></script>
+  <script src="js/page-login.js"></script>
 
 </body>
 </html>

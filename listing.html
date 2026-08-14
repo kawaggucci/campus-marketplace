@@ -18,6 +18,36 @@
           <li data-role="moderator"><a href="moderator.html">Moderation</a></li>
         </ul>
       </nav>
+
+      <!-- Account area: a log in link for visitors, a menu with the role
+           switch and log out for everybody who is logged in. -->
+      <div class="account">
+        <a class="button button-secondary" href="login.html" data-role="visitor">Log in</a>
+
+        <div class="account-menu" data-role="member moderator">
+          <button type="button" class="account-button" id="account-toggle"
+                  aria-expanded="false" aria-controls="account-panel">
+            <span id="account-name">Account</span>
+            <span class="account-role" id="account-role"></span>
+          </button>
+
+          <div class="account-panel is-hidden" id="account-panel">
+            <div class="field">
+              <label for="role-switch">Current role</label>
+              <select id="role-switch">
+                <option value="visitor">Visitor</option>
+                <option value="member">Member</option>
+                <option value="moderator">Moderator</option>
+              </select>
+              <p class="field-hint">
+                In this demo every account may take any role. In a real product
+                the role would belong to the account.
+              </p>
+            </div>
+            <button type="button" class="button button-secondary" id="logout-button">Log out</button>
+          </div>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -122,6 +152,7 @@
   <script src="js/seed-data.js"></script>
   <script src="js/store.js"></script>
   <script src="js/ui.js"></script>
+  <script src="js/account.js"></script>
   <script src="js/page-listing.js"></script>
 
 </body>

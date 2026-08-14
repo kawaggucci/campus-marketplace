@@ -44,15 +44,17 @@ project also works offline.
 
 ## Roles and test users
 
-There is no real authentication. The login form on the start page is a role
-switch: it stores a name and a role in localStorage and the interface changes
-accordingly.
+There is no real authentication. `login.html` is a role switch: it stores a
+name and a role in localStorage and the interface changes accordingly. After
+the login the header shows an account button on the right. It opens a small
+menu where the role can be changed at any time, which makes it quick to see
+the same page through the eyes of each role.
 
 | Role | What it can do | How to try it |
 |---|---|---|
 | Visitor | browse, search and filter listings, send an inquiry to a seller | just open the page, do not log in |
 | Member | everything a visitor can, plus post listings, edit and delete own listings, keep favorites, read inquiries | log in with any name, role "Member" |
-| Moderator | review reported listings, remove them or dismiss the report | log in with any name, role "Moderator" |
+| Moderator | review reported listings, remove them or dismiss the report | log in with any name, role "Moderator", or switch the role in the header menu |
 
 The seed listings belong to the members **maria**, **jonas** and **aylin**.
 Log in with one of these names to see a dashboard that already has content.
@@ -65,7 +67,8 @@ everything this application stored and loads the seed data again.
 
 | File | What it shows |
 |---|---|
-| `index.html` | all listings as a grid, search and filter, the role switch |
+| `index.html` | all listings as a grid, search and filter |
+| `login.html` | the demo login: a name and a starting role |
 | `listing.html?id=...` | one listing in detail, the inquiry form and the report form |
 | `manage.html` | member dashboard: create and edit form, own listings, favorites, inquiries |
 | `moderator.html` | moderator dashboard: reported listings, removed listings |
@@ -87,13 +90,15 @@ everything this application stored and loads the seed data again.
 
 ## Project structure
 
-    index.html          listings, search and filter, role switch
+    index.html          listings, search and filter
+    login.html          demo login
     listing.html        detail page with inquiry and report form
     manage.html         member dashboard
     moderator.html      moderator dashboard
     css/style.css       the only stylesheet, mobile first
     js/store.js         data layer: localStorage, CRUD, session, favorites
     js/ui.js            shared helpers: escaping, formatting, cards, roles
+    js/account.js       the account menu in the header, shared by all pages
     js/page-*.js        the logic of one page each
     js/seed-data.js     fallback copy of the seed data for file://
     js/vendor/          local copy of jQuery

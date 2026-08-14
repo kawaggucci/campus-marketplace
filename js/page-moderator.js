@@ -14,7 +14,6 @@ function handlePageReady() {
 
 function startModeratorPage() {
   const session = getSession();
-  applyRoleVisibility(session.role);
 
   // Role check: this page belongs to moderators only.
   if (session.role !== 'moderator') {
