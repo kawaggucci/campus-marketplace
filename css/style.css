@@ -135,6 +135,276 @@ main {
   font-size: 0.85rem;
 }
 
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Hidden by JavaScript, for example when a part belongs to another role. */
+.is-hidden {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Panels and headings
+--------------------------------------------------------------------------- */
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--gap);
+  margin-bottom: var(--gap-lg);
+}
+
+.panel h2 {
+  margin-top: 0;
+}
+
+.panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--gap);
+}
+
+.panel-head h2 {
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Forms
+--------------------------------------------------------------------------- */
+
+/* Mobile first: the fields are stacked. From 768px they stand in a row,
+   because flex-wrap lets them break into several lines when needed. */
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 180px;
+}
+
+.field label {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.field-actions {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap);
+  align-items: flex-end;
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #ffffff;
+  color: var(--ink);
+  width: 100%;
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid var(--brand);
+  outline-offset: 1px;
+}
+
+/* Marks the input that the validation complained about. */
+.has-error {
+  border-color: var(--warn);
+}
+
+.error-message {
+  margin: 0;
+  min-height: 1.1em;
+  color: var(--warn);
+  font-size: 0.85rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Buttons
+--------------------------------------------------------------------------- */
+
+.button {
+  display: inline-block;
+  padding: 9px 16px;
+  border: 1px solid var(--brand);
+  border-radius: var(--radius);
+  background: var(--brand);
+  color: #ffffff;
+  font: inherit;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button:hover,
+.button:focus {
+  background: var(--brand-dark);
+  border-color: var(--brand-dark);
+  color: #ffffff;
+}
+
+.button-secondary {
+  background: #ffffff;
+  color: var(--brand);
+}
+
+.button-secondary:hover,
+.button-secondary:focus {
+  background: var(--paper);
+  color: var(--brand-dark);
+}
+
+.button-danger {
+  background: var(--warn);
+  border-color: var(--warn);
+  color: #ffffff;
+}
+
+.button-danger:hover,
+.button-danger:focus {
+  background: #8f2f2f;
+  border-color: #8f2f2f;
+}
+
+/* ---------------------------------------------------------------------------
+   Listing grid and cards
+--------------------------------------------------------------------------- */
+
+.result-count {
+  color: var(--ink-soft);
+}
+
+.empty-message {
+  padding: var(--gap);
+  background: var(--card);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  color: var(--ink-soft);
+}
+
+/* Flexbox with wrapping is the layout tool of this project: one column on a
+   phone, several columns as soon as there is room. */
+.listing-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  flex: 1 1 100%;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.card-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card-media {
+  margin: 0;
+  padding: var(--gap-lg) 0;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  border-radius: var(--radius) var(--radius) 0 0;
+  font-size: 2.5rem;
+  text-align: center;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: var(--gap);
+}
+
+.card-title {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.card-title a {
+  text-decoration: none;
+}
+
+.card-title a:hover,
+.card-title a:focus {
+  text-decoration: underline;
+}
+
+.card-price {
+  margin: 0;
+  font-weight: bold;
+  color: var(--ok);
+}
+
+.card-meta {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+.card-text {
+  margin: 0;
+}
+
+.card .button {
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+/* ---------------------------------------------------------------------------
+   Badges
+--------------------------------------------------------------------------- */
+
+.badge {
+  display: inline-block;
+  margin: 0;
+  padding: 3px 8px;
+  border-radius: var(--radius);
+  font-size: 0.8rem;
+}
+
+.badge-warn {
+  background: #fbeaea;
+  color: var(--warn);
+}
+
+.badge-ok {
+  background: #e7f4ec;
+  color: var(--ok);
+}
+
 /* ---------------------------------------------------------------------------
    Wider screens
 --------------------------------------------------------------------------- */
@@ -147,5 +417,26 @@ main {
 
   .brand {
     font-size: 1.4rem;
+  }
+
+  /* The form fields now stand next to each other. */
+  .form-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  /* Two cards per row: half the width minus half of the gap between them. */
+  .card {
+    flex: 1 1 calc(50% - var(--gap));
+    max-width: calc(50% - var(--gap) / 2);
+  }
+}
+
+@media (min-width: 1024px) {
+  /* Three cards per row on a desktop screen. */
+  .card {
+    flex: 1 1 calc(33.333% - var(--gap));
+    max-width: calc(33.333% - var(--gap) * 2 / 3);
   }
 }

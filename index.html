@@ -14,22 +14,111 @@
       <nav class="main-nav" aria-label="Main navigation">
         <ul>
           <li><a href="index.html">Listings</a></li>
-          <li><a href="manage.html">My area</a></li>
-          <li><a href="moderator.html">Moderation</a></li>
+          <li data-role="member"><a href="manage.html">My area</a></li>
+          <li data-role="moderator"><a href="moderator.html">Moderation</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
   <main class="container">
-    <h1>Listings</h1>
-    <p id="status-message">Loading listings…</p>
-    <ul id="listings"></ul>
+
+    <h1>Buy and sell on campus</h1>
+
+    <!-- Role switch. There is no real authentication, the chosen role is only
+         stored in localStorage and decides what the interface shows. -->
+    <section class="panel" aria-labelledby="session-heading">
+      <h2 id="session-heading">Who are you?</h2>
+      <p id="session-info"></p>
+
+      <form id="login-form" class="form-row" data-role="visitor" novalidate>
+        <div class="field">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" list="known-members"
+                 maxlength="20" autocomplete="username" placeholder="e.g. maria">
+          <datalist id="known-members">
+            <option value="maria"></option>
+            <option value="jonas"></option>
+            <option value="aylin"></option>
+          </datalist>
+          <p class="error-message" id="error-username" role="alert"></p>
+        </div>
+
+        <div class="field">
+          <label for="role">Log in as</label>
+          <select id="role" name="role">
+            <option value="member">Member</option>
+            <option value="moderator">Moderator</option>
+          </select>
+        </div>
+
+        <div class="field field-actions">
+          <button type="submit" class="button">Log in</button>
+        </div>
+      </form>
+
+      <button type="button" id="logout-button" class="button button-secondary"
+              data-role="member moderator">Log out</button>
+    </section>
+
+    <!-- Search and filter. Every change re-renders the list with JavaScript,
+         the page is never reloaded. -->
+    <section class="panel" aria-labelledby="filter-heading">
+      <div class="panel-head">
+        <h2 id="filter-heading">Search and filter</h2>
+        <button type="button" id="filter-toggle" class="button button-secondary"
+                aria-expanded="true" aria-controls="filter-form">Hide filters</button>
+      </div>
+
+      <form id="filter-form" class="form-row" novalidate>
+        <div class="field">
+          <label for="keyword">Keyword</label>
+          <input type="search" id="keyword" name="keyword" placeholder="e.g. bike">
+        </div>
+
+        <div class="field">
+          <label for="category">Category</label>
+          <select id="category" name="category">
+            <option value="all">All categories</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="min-price">Price from (€)</label>
+          <input type="number" id="min-price" name="min-price" min="0" step="1">
+          <p class="error-message" id="error-min-price" role="alert"></p>
+        </div>
+
+        <div class="field">
+          <label for="max-price">Price to (€)</label>
+          <input type="number" id="max-price" name="max-price" min="0" step="1">
+          <p class="error-message" id="error-max-price" role="alert"></p>
+        </div>
+
+        <div class="field field-actions">
+          <button type="submit" class="button">Apply</button>
+          <button type="button" id="reset-filter" class="button button-secondary">Reset</button>
+        </div>
+      </form>
+    </section>
+
+    <section aria-labelledby="results-heading">
+      <div class="panel-head">
+        <h2 id="results-heading">Listings</h2>
+        <a class="button" href="manage.html" data-role="member">Post a listing</a>
+      </div>
+
+      <p id="result-count" class="result-count"></p>
+      <ul class="listing-grid" id="listing-grid"></ul>
+      <p id="empty-message" class="empty-message is-hidden">No listings match your search.</p>
+    </section>
+
   </main>
 
   <footer class="site-footer">
-    <div class="container">
+    <div class="container footer-inner">
       <p>Campus Marketplace - student project, module B10 Web Application and Software Architecture.</p>
+      <button type="button" id="reset-demo-data" class="button button-secondary">Reset demo data</button>
     </div>
   </footer>
 
