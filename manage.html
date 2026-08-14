@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Campus Marketplace - My area</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">🎓 Campus Marketplace</a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html">Listings</a></li>
+          <li data-role="member"><a href="manage.html">My area</a></li>
+          <li data-role="moderator"><a href="moderator.html">Moderation</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <h1>My area</h1>
+
+    <!-- Shown to everybody who is not a logged in member. -->
+    <section class="panel is-hidden" id="members-only">
+      <h2>This area is for members</h2>
+      <p>Only a logged in member can post listings, keep favorites and read inquiries.</p>
+      <p><a class="button" href="index.html">Go to the listings and log in</a></p>
+    </section>
+
+    <div class="is-hidden" id="member-area">
+
+      <section class="panel" aria-labelledby="form-heading">
+        <h2 id="form-heading">Post a new listing</h2>
+
+        <form id="listing-form" class="form-row" novalidate>
+          <div class="field field-wide">
+            <label for="listing-title">Title</label>
+            <input type="text" id="listing-title" name="listing-title" maxlength="80">
+            <p class="error-message" id="error-listing-title" role="alert"></p>
+          </div>
+
+          <div class="field">
+            <label for="listing-category">Category</label>
+            <select id="listing-category" name="listing-category"></select>
+            <p class="error-message" id="error-listing-category" role="alert"></p>
+          </div>
+
+          <div class="field">
+            <label for="listing-price">Price in €</label>
+            <input type="number" id="listing-price" name="listing-price" min="0" step="1">
+            <p class="error-message" id="error-listing-price" role="alert"></p>
+          </div>
+
+          <div class="field field-wide">
+            <label for="listing-description">Description</label>
+            <textarea id="listing-description" name="listing-description" maxlength="500"></textarea>
+            <p class="error-message" id="error-listing-description" role="alert"></p>
+          </div>
+
+          <div class="field field-actions">
+            <button type="submit" class="button" id="listing-submit">Publish listing</button>
+            <button type="button" class="button button-secondary is-hidden" id="cancel-edit">Cancel</button>
+          </div>
+        </form>
+
+        <p class="badge badge-ok is-hidden" id="listing-success"></p>
+      </section>
+
+      <section class="panel" aria-labelledby="my-listings-heading">
+        <h2 id="my-listings-heading">My listings</h2>
+        <ul class="row-list" id="my-listings"></ul>
+        <p class="empty-message is-hidden" id="my-listings-empty">
+          You have not posted anything yet.
+        </p>
+      </section>
+
+      <section class="panel" aria-labelledby="favorites-heading">
+        <h2 id="favorites-heading">My favorites</h2>
+        <ul class="listing-grid" id="favorites-grid"></ul>
+        <p class="empty-message is-hidden" id="favorites-empty">
+          You have no favorites yet. Use the button on a listing to save it here.
+        </p>
+      </section>
+
+      <section class="panel" aria-labelledby="inbox-heading">
+        <h2 id="inbox-heading">Inquiries about my listings</h2>
+        <ul class="row-list" id="inbox"></ul>
+        <p class="empty-message is-hidden" id="inbox-empty">
+          No open inquiries.
+        </p>
+      </section>
+
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>Campus Marketplace - student project, module B10 Web Application and Software Architecture.</p>
+    </div>
+  </footer>
+
+  <!-- jQuery first, then our own scripts: data layer, helpers, page logic. -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- If the CDN cannot be reached (no internet), load the local copy instead. -->
+  <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.7.1.min.js"><\/script>');</script>
+  <script src="js/seed-data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/page-manage.js"></script>
+
+</body>
+</html>

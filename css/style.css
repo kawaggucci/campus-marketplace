@@ -396,6 +396,62 @@ textarea:focus {
 }
 
 /* ---------------------------------------------------------------------------
+   Row lists (my listings, inbox, moderation queue)
+--------------------------------------------------------------------------- */
+
+.row-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Mobile first: text above, buttons below. From 768px they stand side by
+   side, see the media query at the end of the file. */
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  padding: var(--gap);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.row-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 auto;
+}
+
+.row-title {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.row-title a {
+  text-decoration: none;
+}
+
+.row-text {
+  margin: 0;
+  white-space: pre-line;
+}
+
+.row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+  align-items: flex-start;
+}
+
+.badge {
+  align-self: flex-start;
+}
+
+/* ---------------------------------------------------------------------------
    Detail page
 --------------------------------------------------------------------------- */
 
@@ -466,6 +522,13 @@ textarea:focus {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-start;
+  }
+
+  /* Text on the left, buttons on the right. */
+  .row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
   }
 
   /* Two cards per row: half the width minus half of the gap between them. */
