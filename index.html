@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Campus Marketplace - Listings</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">🎓 Campus Marketplace</a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html">Listings</a></li>
+          <li><a href="manage.html">My area</a></li>
+          <li><a href="moderator.html">Moderation</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Listings</h1>
+    <p id="status-message">Loading listings…</p>
+    <ul id="listings"></ul>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Campus Marketplace - student project, module B10 Web Application and Software Architecture.</p>
+    </div>
+  </footer>
+
+  <!-- jQuery first, then our own scripts: data layer, helpers, page logic. -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="js/seed-data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/page-index.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,151 @@
+/*
+  style.css - the only stylesheet of the project.
+
+  Written mobile first: the rules outside the media queries describe the
+  narrow phone layout, and the media query at 768px adds the wider layout.
+  All colours, spacing and radius values are CSS custom properties defined in
+  :root, so the whole theme can be changed in one place.
+*/
+
+/* ---------------------------------------------------------------------------
+   Theme variables
+--------------------------------------------------------------------------- */
+
+:root {
+  /* colours */
+  --brand: #2f6db0;
+  --brand-dark: #1d4b7d;
+  --ink: #16202b;
+  --ink-soft: #5b6b7c;
+  --paper: #f4f6f9;
+  --card: #ffffff;
+  --line: #d5dee7;
+  --ok: #2e8b57;
+  --warn: #b23b3b;
+
+  /* spacing */
+  --gap: 12px;
+  --gap-lg: 24px;
+
+  /* shape */
+  --radius: 8px;
+
+  /* page width */
+  --page-width: 1000px;
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+--------------------------------------------------------------------------- */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+}
+
+a {
+  color: var(--brand);
+}
+
+a:hover,
+a:focus {
+  color: var(--brand-dark);
+}
+
+/* The fluid column pattern from the lab: full width, but never wider than
+   --page-width, and centred by the automatic margins. */
+.container {
+  width: 100%;
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: 0 var(--gap);
+}
+
+/* ---------------------------------------------------------------------------
+   Header and navigation
+--------------------------------------------------------------------------- */
+
+.site-header {
+  background: var(--brand-dark);
+  color: #ffffff;
+  padding: var(--gap) 0;
+}
+
+.header-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.main-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.main-nav a {
+  color: #ffffff;
+  text-decoration: none;
+  padding: 4px 2px;
+}
+
+.main-nav a:hover,
+.main-nav a:focus {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* ---------------------------------------------------------------------------
+   Main content and footer
+--------------------------------------------------------------------------- */
+
+main {
+  padding: var(--gap-lg) 0 48px 0;
+}
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding: var(--gap) 0;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Wider screens
+--------------------------------------------------------------------------- */
+
+@media (min-width: 768px) {
+  :root {
+    --gap: 16px;
+    --gap-lg: 32px;
+  }
+
+  .brand {
+    font-size: 1.4rem;
+  }
+}

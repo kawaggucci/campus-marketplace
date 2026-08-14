@@ -1,0 +1,144 @@
+/*
+  seed-data.js
+  Fallback copy of data/listings.json.
+
+  The app normally loads the seed data with $.getJSON('data/listings.json').
+  That is an AJAX request, and browsers block AJAX requests when the page is
+  opened directly from the file system (file:// protocol, CORS). In that case
+  the AJAX call fails and store.js uses this array instead, so the page is
+  never empty. Keep this file in sync with data/listings.json.
+*/
+
+const SEED_LISTINGS = [
+  {
+    "id": 1,
+    "title": "Introduction to Software Architecture (5th edition)",
+    "description": "Textbook for module B10. Some pencil notes in the first chapter, otherwise clean. Pick up near campus Wilhelminenhof.",
+    "category": "books",
+    "price": 18,
+    "sellerId": "maria",
+    "createdAt": "2026-07-21T09:30:00Z",
+    "status": "active"
+  },
+  {
+    "id": 2,
+    "title": "Discrete Mathematics textbook bundle",
+    "description": "Two books plus my solved exercise sheets from last semester. Good for the maths exam.",
+    "category": "books",
+    "price": 25,
+    "sellerId": "jonas",
+    "createdAt": "2026-07-23T14:05:00Z",
+    "status": "active"
+  },
+  {
+    "id": 3,
+    "title": "IKEA desk, white, 120x60 cm",
+    "description": "Used for two semesters, stable and no scratches on the top. You have to pick it up yourself, I can help carrying it down.",
+    "category": "furniture",
+    "price": 35,
+    "sellerId": "aylin",
+    "createdAt": "2026-07-25T18:40:00Z",
+    "status": "active"
+  },
+  {
+    "id": 4,
+    "title": "Office chair with adjustable height",
+    "description": "Black office chair, all wheels work. The armrests can be removed if you need more space.",
+    "category": "furniture",
+    "price": 40,
+    "sellerId": "maria",
+    "createdAt": "2026-07-27T11:15:00Z",
+    "status": "active"
+  },
+  {
+    "id": 5,
+    "title": "City bike, 28 inch, 7 gears",
+    "description": "Reliable bike for the way to university. New tires this spring, lights work. Lock included.",
+    "category": "bikes",
+    "price": 120,
+    "sellerId": "jonas",
+    "createdAt": "2026-07-28T08:20:00Z",
+    "status": "active"
+  },
+  {
+    "id": 6,
+    "title": "Vintage road bike, frame size 56",
+    "description": "Steel frame from the 90s, fully serviced last month. Fast and light, but no luggage rack.",
+    "category": "bikes",
+    "price": 190,
+    "sellerId": "aylin",
+    "createdAt": "2026-07-30T16:00:00Z",
+    "status": "active"
+  },
+  {
+    "id": 7,
+    "title": "Bike helmet, size M",
+    "description": "Barely used helmet, never had an accident with it. Colour is dark grey.",
+    "category": "bikes",
+    "price": 15,
+    "sellerId": "maria",
+    "createdAt": "2026-08-01T10:45:00Z",
+    "status": "active"
+  },
+  {
+    "id": 8,
+    "title": "24 inch monitor, Full HD",
+    "description": "HDMI and VGA input, stand included. Perfect as a second screen for programming.",
+    "category": "electronics",
+    "price": 65,
+    "sellerId": "jonas",
+    "createdAt": "2026-08-02T13:10:00Z",
+    "status": "active"
+  },
+  {
+    "id": 9,
+    "title": "Mechanical keyboard, German layout",
+    "description": "Brown switches, so it is not too loud for the library. USB cable is detachable.",
+    "category": "electronics",
+    "price": 45,
+    "sellerId": "aylin",
+    "createdAt": "2026-08-04T19:25:00Z",
+    "status": "active"
+  },
+  {
+    "id": 10,
+    "title": "USB-C docking station",
+    "description": "Two HDMI ports, three USB-A ports and an ethernet port. Works with my laptop, I only sell it because I got a new one.",
+    "category": "electronics",
+    "price": 30,
+    "sellerId": "maria",
+    "createdAt": "2026-08-06T09:00:00Z",
+    "status": "active"
+  },
+  {
+    "id": 11,
+    "title": "LED desk lamp, dimmable",
+    "description": "Three brightness levels, warm and cold light. Good for late evening study sessions.",
+    "category": "other",
+    "price": 12,
+    "sellerId": "jonas",
+    "createdAt": "2026-08-08T20:15:00Z",
+    "status": "active"
+  },
+  {
+    "id": 12,
+    "title": "Moving boxes, 10 pieces",
+    "description": "Stable boxes from my last move, all of them are still in one piece. Can be folded flat for transport.",
+    "category": "other",
+    "price": 8,
+    "sellerId": "aylin",
+    "createdAt": "2026-08-10T12:30:00Z",
+    "status": "active"
+  },
+  {
+    "id": 13,
+    "title": "Free laptop, only pay the shipping fee",
+    "description": "Write me on my private number and transfer the shipping fee first, then I send the laptop.",
+    "category": "electronics",
+    "price": 0,
+    "sellerId": "jonas",
+    "createdAt": "2026-08-11T07:50:00Z",
+    "status": "reported",
+    "reportReason": "Looks like a scam, asks for money before delivery."
+  }
+];
