@@ -65,6 +65,14 @@ a:focus {
   color: var(--brand-dark);
 }
 
+/* Keyboard users must see where they are. currentColor is used so the ring
+   stays visible on the dark header as well as on the light pages. */
+a:focus-visible,
+.button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
 /* The fluid column pattern from the lab: full width, but never wider than
    --page-width, and centred by the automatic margins. */
 .container {
