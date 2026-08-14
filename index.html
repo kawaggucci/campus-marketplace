@@ -31,11 +31,13 @@
       <h2 id="session-heading">Who are you?</h2>
       <p id="session-info"></p>
 
-      <form id="login-form" class="form-row" data-role="visitor" novalidate>
+      <form id="login-form" class="form-row" data-role="visitor" autocomplete="off" novalidate>
         <div class="field">
           <label for="username">Username</label>
-          <input type="text" id="username" name="username" list="known-members"
-                 maxlength="20" autocomplete="username" placeholder="e.g. maria">
+          <!-- autocomplete is off on purpose: this is a demo role switch, not a
+               real login, so the browser should not offer saved accounts here. -->
+          <input type="text" id="username" name="member-name" list="known-members"
+                 maxlength="20" autocomplete="off" placeholder="e.g. maria">
           <datalist id="known-members">
             <option value="maria"></option>
             <option value="jonas"></option>
