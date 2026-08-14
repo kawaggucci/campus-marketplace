@@ -23,6 +23,9 @@ function startModeratorPage() {
 
   $('#moderator-area').removeClass('is-hidden');
   bindPageEvents();
+
+  // When the backend answers later and changes something, draw the lists again.
+  setStoreSyncHandler(renderModerationLists);
   renderModerationLists();
 }
 

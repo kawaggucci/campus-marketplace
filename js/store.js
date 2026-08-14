@@ -32,6 +32,37 @@ const GUEST_SESSION = { username: '', role: 'visitor' };
 // Callback that runs after the seed data is ready (see initStore).
 let storeReadyCallback = null;
 
+// True when the backend answered and the data comes from there.
+let usingApi = false;
+
+// A page can register a function that renders it again. It is called when an
+// answer from the backend changes something after the page was drawn, for
+// example when a new listing gets its real id from the server.
+let storeSyncHandler = null;
+
+function setStoreSyncHandler(handler) {
+  storeSyncHandler = handler;
+}
+
+function notifyStoreSynced() {
+  if (storeSyncHandler) {
+    storeSyncHandler();
+  }
+}
+
+function isUsingApi() {
+  return usingApi;
+}
+
+// A write that the backend did not accept is only in this browser. The user
+// keeps working, but the console says what happened.
+function handleApiWriteFailed(request) {
+  console.warn(
+    'The backend did not accept the change (status ' + request.status +
+    '). It is stored in this browser only.'
+  );
+}
+
 /* ---------------------------------------------------------------------------
    Low level helpers: reading and writing localStorage
 --------------------------------------------------------------------------- */
@@ -89,18 +120,106 @@ function nextId(records) {
 --------------------------------------------------------------------------- */
 
 /*
-  initStore loads the seed listings the first time the app runs and calls
-  onReady when the data is available.
+  initStore gets the data ready and calls onReady when the page may render.
 
-  The seed data is loaded with $.getJSON. That is an AJAX request, and the
-  browser blocks it when the page is opened directly from the hard disk
-  (file:// protocol). If the request fails we use the array from
-  js/seed-data.js instead, so the page is never empty. Which of the two paths
-  was used is written to the console.
+  There are three sources, tried in this order:
+
+  1. the backend, if it answers the health check. Then it is the source of
+     truth and every change is sent to it as well,
+  2. data/listings.json loaded with $.getJSON, the AJAX way from the lecture.
+     The browser blocks such a request when the page is opened directly from
+     the hard disk (file:// protocol),
+  3. the array in js/seed-data.js, so even a double clicked index.html shows
+     a full page.
+
+  Which path was used is written to the console.
 */
 function initStore(onReady) {
   storeReadyCallback = onReady;
 
+  apiCheckHealth()
+    .done(handleApiAvailable)
+    .fail(handleApiMissing);
+}
+
+function handleApiAvailable() {
+  usingApi = true;
+  console.log('Data source: the backend at ' + apiBaseUrl() + '.');
+  loadListingsFromApi();
+}
+
+function handleApiMissing() {
+  usingApi = false;
+  console.log('Data source: no backend reachable, working with local data only.');
+  loadSeedData();
+}
+
+/* ---------------------------------------------------------------------------
+   Loading everything the current user may see from the backend
+--------------------------------------------------------------------------- */
+
+function loadListingsFromApi() {
+  apiGetListings()
+    .done(function (records) {
+      saveArray(KEY_LISTINGS, toFrontendListings(records));
+      loadRemovedListingsFromApi();
+    })
+    .fail(function () {
+      console.warn('The backend answered the health check but not the listings, using local data.');
+      usingApi = false;
+      loadSeedData();
+    });
+}
+
+// The public list leaves removed listings out, but a moderator has to see
+// what was taken off the board.
+function loadRemovedListingsFromApi() {
+  if (getSession().role !== 'moderator') {
+    loadInquiriesFromApi();
+    return;
+  }
+
+  apiGetRemovedListings()
+    .done(function (records) {
+      saveArray(KEY_LISTINGS, getListings().concat(toFrontendListings(records)));
+    })
+    .always(loadInquiriesFromApi);
+}
+
+function loadInquiriesFromApi() {
+  if (getSession().role !== 'member') {
+    finishApiLoad();
+    return;
+  }
+
+  apiGetInquiries()
+    .done(function (records) {
+      saveArray(KEY_INQUIRIES, toFrontendInquiries(records));
+    })
+    .always(loadFavoritesFromApi);
+}
+
+function loadFavoritesFromApi() {
+  apiGetFavorites()
+    .done(function (records) {
+      const favorites = getFavoritesMap();
+      favorites[getSession().username] = records.map(function (listing) {
+        return listing.id;
+      });
+      saveObject(KEY_FAVORITES, favorites);
+    })
+    .always(finishApiLoad);
+}
+
+function finishApiLoad() {
+  storeReadyCallback();
+}
+
+/* ---------------------------------------------------------------------------
+   Local data: the seed file, or the fallback array
+--------------------------------------------------------------------------- */
+
+function loadSeedData() {
   // Seeding happens only once. After that localStorage is the source of truth.
   if (localStorage.getItem(KEY_LISTINGS)) {
     console.log('Seed data: not needed, listings were loaded from localStorage.');
@@ -193,7 +312,31 @@ function createListing(data) {
   };
   listings.push(listing);
   saveArray(KEY_LISTINGS, listings);
+
+  if (usingApi) {
+    // The backend gives the record its real id, so the local one is replaced
+    // as soon as the answer arrives and the page is drawn again.
+    const temporaryId = listing.id;
+    apiCreateListing(listing)
+      .done(function (record) {
+        replaceListing(temporaryId, toFrontendListing(record));
+        notifyStoreSynced();
+      })
+      .fail(handleApiWriteFailed);
+  }
+
   return listing;
+}
+
+// Puts a record from the backend in the place of the local one.
+function replaceListing(oldId, listing) {
+  const listings = getListings().map(function (item) {
+    if (item.id === oldId) {
+      return listing;
+    }
+    return item;
+  });
+  saveArray(KEY_LISTINGS, listings);
 }
 
 // Update: find the record, change the fields, save the array back.
@@ -208,6 +351,11 @@ function updateListing(id, changes) {
   listing.category = changes.category;
   listing.price = changes.price;
   saveArray(KEY_LISTINGS, listings);
+
+  if (usingApi) {
+    apiUpdateListing(listing.id, listing).fail(handleApiWriteFailed);
+  }
+
   return listing;
 }
 
@@ -219,6 +367,10 @@ function deleteListing(id) {
   });
   saveArray(KEY_LISTINGS, remaining);
   removeInquiriesForListing(wantedId);
+
+  if (usingApi) {
+    apiDeleteListing(wantedId).fail(handleApiWriteFailed);
+  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -235,6 +387,11 @@ function reportListing(id, reason) {
   listing.status = 'reported';
   listing.reportReason = reason;
   saveArray(KEY_LISTINGS, listings);
+
+  if (usingApi) {
+    apiReportListing(listing.id, reason).fail(handleApiWriteFailed);
+  }
+
   return listing;
 }
 
@@ -247,6 +404,11 @@ function removeListing(id) {
   }
   listing.status = 'removed';
   saveArray(KEY_LISTINGS, listings);
+
+  if (usingApi) {
+    apiRemoveListing(listing.id).fail(handleApiWriteFailed);
+  }
+
   return listing;
 }
 
@@ -260,6 +422,11 @@ function clearReport(id) {
   listing.status = 'active';
   delete listing.reportReason;
   saveArray(KEY_LISTINGS, listings);
+
+  if (usingApi) {
+    apiDismissReport(listing.id).fail(handleApiWriteFailed);
+  }
+
   return listing;
 }
 
@@ -284,6 +451,11 @@ function addInquiry(data) {
   };
   inquiries.push(inquiry);
   saveArray(KEY_INQUIRIES, inquiries);
+
+  if (usingApi) {
+    apiAddInquiry(inquiry).fail(handleApiWriteFailed);
+  }
+
   return inquiry;
 }
 
@@ -308,6 +480,11 @@ function dismissInquiry(id) {
   }
   inquiry.dismissed = true;
   saveArray(KEY_INQUIRIES, inquiries);
+
+  if (usingApi) {
+    apiDismissInquiry(inquiry.id).fail(handleApiWriteFailed);
+  }
+
   return inquiry;
 }
 
@@ -355,7 +532,20 @@ function toggleFavorite(username, listingId) {
   }
 
   saveObject(KEY_FAVORITES, favorites);
+
+  if (usingApi) {
+    sendFavoriteToApi(wantedId, !alreadyFavorite);
+  }
+
   return !alreadyFavorite;
+}
+
+function sendFavoriteToApi(listingId, isFavoriteNow) {
+  if (isFavoriteNow) {
+    apiAddFavorite(listingId).fail(handleApiWriteFailed);
+  } else {
+    apiRemoveFavorite(listingId).fail(handleApiWriteFailed);
+  }
 }
 
 // The favorite listings of a member as full records, without removed ones.

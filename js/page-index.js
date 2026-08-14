@@ -16,6 +16,9 @@ function startListingsPage() {
   fillCategoryFilter();
   bindPageEvents();
   showSessionIntro();
+
+  // When the backend answers later and changes something, draw the list again.
+  setStoreSyncHandler(renderResults);
   renderResults();
 }
 

@@ -28,7 +28,14 @@ function startManagePage() {
   fillCategorySelect();
   bindPageEvents();
   startEditFromUrl(session);
+
+  // When the backend answers later and changes something, draw the page again.
+  setStoreSyncHandler(renderAfterSync);
   renderAllSections(session);
+}
+
+function renderAfterSync() {
+  renderAllSections(getSession());
 }
 
 function bindPageEvents() {
