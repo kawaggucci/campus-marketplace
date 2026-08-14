@@ -232,6 +232,13 @@ textarea:focus {
   outline-offset: 1px;
 }
 
+/* Short explanation under an input, connected with aria-describedby. */
+.field-hint {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
 /* Marks the input that the validation complained about. */
 .has-error {
   border-color: var(--warn);

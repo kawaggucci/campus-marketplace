@@ -36,13 +36,12 @@
           <label for="username">Username</label>
           <!-- autocomplete is off on purpose: this is a demo role switch, not a
                real login, so the browser should not offer saved accounts here. -->
-          <input type="text" id="username" name="member-name" list="known-members"
-                 maxlength="20" autocomplete="off" placeholder="e.g. maria">
-          <datalist id="known-members">
-            <option value="maria"></option>
-            <option value="jonas"></option>
-            <option value="aylin"></option>
-          </datalist>
+          <input type="text" id="username" name="member-name" maxlength="20"
+                 autocomplete="off" placeholder="e.g. maria"
+                 aria-describedby="username-hint">
+          <p class="field-hint" id="username-hint">
+            Any name works. The demo listings belong to maria, jonas and aylin.
+          </p>
           <p class="error-message" id="error-username" role="alert"></p>
         </div>
 
