@@ -12,26 +12,30 @@
 --------------------------------------------------------------------------- */
 
 :root {
-  /* colours */
-  --brand: #2f6db0;
-  --brand-dark: #1d4b7d;
-  --ink: #16202b;
-  --ink-soft: #5b6b7c;
-  --paper: #f4f6f9;
+  /* colours: dark shell around a light board, violet as the accent */
+  --brand: #7c3aed;
+  --brand-dark: #6d28d9;
+  --brand-soft: #f5f3ff;
+  --shell: #14101c;
+  --ink: #16161a;
+  --ink-soft: #6b6b76;
+  --paper: #f7f7f9;
   --card: #ffffff;
-  --line: #d5dee7;
-  --ok: #2e8b57;
-  --warn: #b23b3b;
+  --surface: #ffffff;
+  --line: #e4e4e9;
+  --line-strong: #d3d3db;
+  --warn: #b91c1c;
+  --warn-soft: #fef2f2;
 
   /* spacing */
   --gap: 12px;
   --gap-lg: 24px;
 
-  /* shape */
-  --radius: 8px;
+  /* shape: square corners everywhere, the theme has no rounding */
+  --radius: 0;
 
   /* page width */
-  --page-width: 1000px;
+  --page-width: 1040px;
 }
 
 /* ---------------------------------------------------------------------------
@@ -44,8 +48,8 @@
 
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  line-height: 1.5;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
   color: var(--ink);
   background: var(--paper);
 }
@@ -54,6 +58,11 @@ h1,
 h2,
 h3 {
   line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: 1.7rem;
 }
 
 a {
@@ -87,7 +96,7 @@ a:focus-visible,
 --------------------------------------------------------------------------- */
 
 .site-header {
-  background: var(--brand-dark);
+  background: var(--shell);
   color: #ffffff;
   padding: var(--gap) 0;
 }
@@ -102,8 +111,9 @@ a:focus-visible,
 
 .brand {
   color: #ffffff;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: bold;
+  letter-spacing: -0.01em;
   text-decoration: none;
 }
 
@@ -118,6 +128,9 @@ a:focus-visible,
 
 .main-nav a {
   color: #ffffff;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   text-decoration: none;
   padding: 4px 2px;
 }
@@ -129,17 +142,76 @@ a:focus-visible,
 }
 
 /* ---------------------------------------------------------------------------
+   Account area in the header
+--------------------------------------------------------------------------- */
+
+/* The panel is placed against this box, so it opens under the button. */
+.account {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--gap);
+}
+
+.account-button {
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  color: #ffffff;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.account-button:hover,
+.account-button:focus-visible {
+  border-color: #ffffff;
+}
+
+.account-role {
+  margin-left: 8px;
+  color: #a8a3b8;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.account-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 10;
+  width: 260px;
+  padding: var(--gap);
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------------------------
    Main content and footer
 --------------------------------------------------------------------------- */
+
+/* Pages with a single column of content, for example the login page. */
+.narrow-page {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.page-intro {
+  margin-top: 0;
+  color: var(--ink-soft);
+}
 
 main {
   padding: var(--gap-lg) 0 48px 0;
 }
 
 .site-footer {
-  border-top: 1px solid var(--line);
-  padding: var(--gap) 0;
-  color: var(--ink-soft);
+  background: var(--shell);
+  padding: var(--gap-lg) 0;
+  color: #a8a3b8;
   font-size: 0.85rem;
 }
 
@@ -151,20 +223,15 @@ main {
   justify-content: space-between;
 }
 
-/* Hidden by JavaScript, for example when a part belongs to another role. */
-.is-hidden {
-  display: none;
-}
-
 /* ---------------------------------------------------------------------------
    Panels and headings
 --------------------------------------------------------------------------- */
 
 .panel {
-  background: var(--card);
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: var(--gap);
+  padding: var(--gap-lg) var(--gap);
   margin-bottom: var(--gap-lg);
 }
 
@@ -179,6 +246,8 @@ main {
   align-items: center;
   justify-content: space-between;
   margin-bottom: var(--gap);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
 }
 
 .panel-head h2 {
@@ -212,8 +281,9 @@ main {
 .field-actions {
   display: flex;
   flex-direction: row;
+  flex: 0 0 auto;
   gap: var(--gap);
-  align-items: flex-end;
+  align-items: flex-start;
 }
 
 /* A field that always takes a whole line, for example a textarea. */
@@ -276,6 +346,10 @@ textarea:focus {
   background: var(--brand);
   color: #ffffff;
   font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   text-align: center;
   text-decoration: none;
   cursor: pointer;
@@ -290,13 +364,15 @@ textarea:focus {
 
 .button-secondary {
   background: #ffffff;
-  color: var(--brand);
+  border-color: var(--line);
+  color: var(--ink);
 }
 
 .button-secondary:hover,
 .button-secondary:focus {
-  background: var(--paper);
-  color: var(--brand-dark);
+  background: var(--surface);
+  border-color: var(--line-strong);
+  color: var(--ink);
 }
 
 .button-danger {
@@ -322,7 +398,7 @@ textarea:focus {
 .empty-message {
   padding: var(--gap);
   background: var(--card);
-  border: 1px dashed var(--line);
+  border: 1px dashed var(--line-strong);
   border-radius: var(--radius);
   color: var(--ink-soft);
 }
@@ -340,20 +416,30 @@ textarea:focus {
 
 .card {
   flex: 1 1 100%;
+  display: flex;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
+  overflow: hidden;
 }
 
+/* The border darkens on hover, so the cards feel clickable. */
+.card:hover {
+  border-color: var(--ink);
+}
+
+/* The cards in one row are equally high because they are flex items. The
+   inner column fills that height, which lets the button sit at the bottom. */
 .card-inner {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex: 1 1 auto;
+  width: 100%;
 }
 
 .card-media {
   margin: 0;
-  padding: var(--gap-lg) 0;
+  padding: 40px 0;
   background: var(--paper);
   border-bottom: 1px solid var(--line);
   border-radius: var(--radius) var(--radius) 0 0;
@@ -364,28 +450,50 @@ textarea:focus {
 .card-body {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
   gap: 6px;
   padding: var(--gap);
 }
 
-.card-title {
+/* Small uppercase category line above the title. */
+.card-label {
   margin: 0;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--ink-soft);
+}
+
+/* Two lines for the title and three for the description: longer text is cut
+   off, so all cards of a row keep the same rhythm. */
+.card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+  min-height: 2.6em;
   font-size: 1.05rem;
 }
 
+/* The title is plain dark text, not a coloured link: on a wall of cards the
+   violet was too loud. The accent only appears on hover. */
 .card-title a {
+  color: var(--ink);
   text-decoration: none;
 }
 
 .card-title a:hover,
 .card-title a:focus {
+  color: var(--brand-dark);
   text-decoration: underline;
 }
 
 .card-price {
   margin: 0;
+  font-size: 1.15rem;
   font-weight: bold;
-  color: var(--ok);
+  color: var(--ink);
 }
 
 .card-meta {
@@ -395,12 +503,19 @@ textarea:focus {
 }
 
 .card-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
   margin: 0;
+  color: var(--ink-soft);
 }
 
+/* margin-top: auto pushes the button to the bottom of the card, so the
+   buttons of one row stand on the same line. */
 .card .button {
   align-self: flex-start;
-  margin-top: 4px;
+  margin-top: auto;
 }
 
 /* ---------------------------------------------------------------------------
@@ -423,6 +538,7 @@ textarea:focus {
   flex-direction: column;
   gap: var(--gap);
   padding: var(--gap);
+  background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
 }
@@ -440,7 +556,14 @@ textarea:focus {
 }
 
 .row-title a {
+  color: var(--ink);
   text-decoration: none;
+}
+
+.row-title a:hover,
+.row-title a:focus {
+  color: var(--brand-dark);
+  text-decoration: underline;
 }
 
 .row-text {
@@ -474,7 +597,7 @@ textarea:focus {
   margin: 0 0 4px 0;
   font-size: 1.3rem;
   font-weight: bold;
-  color: var(--ok);
+  color: var(--ink);
 }
 
 /* Keeps the line breaks that the seller typed into the description. */
@@ -497,18 +620,20 @@ textarea:focus {
   display: inline-block;
   margin: 0;
   padding: 3px 8px;
-  border-radius: var(--radius);
-  font-size: 0.8rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .badge-warn {
-  background: #fbeaea;
+  background: var(--warn-soft);
   color: var(--warn);
 }
 
 .badge-ok {
-  background: #e7f4ec;
-  color: var(--ok);
+  background: var(--brand-soft);
+  color: var(--brand-dark);
 }
 
 /* ---------------------------------------------------------------------------
@@ -532,6 +657,13 @@ textarea:focus {
     align-items: flex-start;
   }
 
+  /* Every other field starts with a label, the button group does not. This
+     margin is the height of one label line plus the gap under it, so the
+     buttons end up on the same line as the input boxes. */
+  .form-row .field-actions {
+    margin-top: calc(0.9rem * 1.6 + 4px);
+  }
+
   /* Text on the left, buttons on the right. */
   .row {
     flex-direction: row;
@@ -552,4 +684,17 @@ textarea:focus {
     flex: 1 1 calc(33.333% - var(--gap));
     max-width: calc(33.333% - var(--gap) * 2 / 3);
   }
+}
+
+/* ---------------------------------------------------------------------------
+   Helper class
+
+   JavaScript adds .is-hidden to hide a part of the page, for example a section
+   that belongs to another role. The rule stands at the very end of the file on
+   purpose: it has the same specificity as rules like .button or .badge, and
+   with equal specificity the rule that comes last wins.
+--------------------------------------------------------------------------- */
+
+.is-hidden {
+  display: none;
 }

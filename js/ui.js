@@ -147,12 +147,12 @@ function buildListingCard(listing, options) {
       '<article class="card-inner">' +
         '<p class="card-media" aria-hidden="true">' + categoryIcon(listing.category) + '</p>' +
         '<div class="card-body">' +
+          '<p class="card-label">' + escapeHtml(formatCategory(listing.category)) + '</p>' +
           '<h3 class="card-title">' +
             '<a href="listing.html?id=' + Number(listing.id) + '">' + escapeHtml(listing.title) + '</a>' +
           '</h3>' +
           '<p class="card-price">' + formatPrice(listing.price) + '</p>' +
           '<p class="card-meta">' +
-            escapeHtml(formatCategory(listing.category)) + ' | ' +
             escapeHtml(listing.sellerId) + ' | ' +
             formatDate(listing.createdAt) +
           '</p>' +
