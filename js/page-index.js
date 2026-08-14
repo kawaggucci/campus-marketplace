@@ -32,6 +32,10 @@ function bindPageEvents() {
   $('#reset-filter').on('click', handleFilterReset);
   $('#keyword').on('input', handleFilterChange);
   $('#category').on('change', handleFilterChange);
+  // change and not input: while the user types "100" the list should not
+  // jump through the results for "1" and "10" first.
+  $('#min-price').on('change', handleFilterChange);
+  $('#max-price').on('change', handleFilterChange);
 
   // Event delegation: the cards are created later by JavaScript, so the
   // handler is bound to the list that already exists in the HTML.
