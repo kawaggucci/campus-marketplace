@@ -208,6 +208,11 @@ main {
   align-items: flex-end;
 }
 
+/* A field that always takes a whole line, for example a textarea. */
+.field-wide {
+  flex: 1 1 100%;
+}
+
 input,
 select,
 textarea {
@@ -388,6 +393,36 @@ textarea:focus {
 .card .button {
   align-self: flex-start;
   margin-top: 4px;
+}
+
+/* ---------------------------------------------------------------------------
+   Detail page
+--------------------------------------------------------------------------- */
+
+.detail-media {
+  margin: 0;
+  padding: var(--gap) 0;
+  font-size: 3rem;
+  text-align: center;
+}
+
+.detail-price {
+  margin: 0 0 4px 0;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--ok);
+}
+
+/* Keeps the line breaks that the seller typed into the description. */
+.detail-description {
+  white-space: pre-line;
+}
+
+.detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+  margin-top: var(--gap);
 }
 
 /* ---------------------------------------------------------------------------

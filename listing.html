@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Campus Marketplace - Listing</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">🎓 Campus Marketplace</a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html">Listings</a></li>
+          <li data-role="member"><a href="manage.html">My area</a></li>
+          <li data-role="moderator"><a href="moderator.html">Moderation</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <p><a href="index.html">Back to all listings</a></p>
+
+    <!-- Shown when the id in the address does not belong to any listing. -->
+    <section class="panel is-hidden" id="not-found">
+      <h1>Listing not found</h1>
+      <p>This listing does not exist any more, or the address is wrong.</p>
+    </section>
+
+    <!-- The empty elements are filled by page-listing.js with .text(), so
+         user written content can never become markup. -->
+    <article class="panel is-hidden" id="listing-detail">
+      <p class="detail-media" id="detail-icon" aria-hidden="true"></p>
+      <h1 id="detail-title"></h1>
+      <p class="detail-price" id="detail-price"></p>
+      <p class="card-meta" id="detail-meta"></p>
+      <p class="badge badge-warn is-hidden" id="detail-reported">Reported, waiting for a moderator</p>
+      <h2>Description</h2>
+      <p class="detail-description" id="detail-description"></p>
+
+      <div class="detail-actions">
+        <button type="button" class="button button-secondary is-hidden" id="favorite-button">
+          Add to favorites
+        </button>
+        <a class="button button-secondary is-hidden" id="edit-link" href="manage.html">Edit this listing</a>
+      </div>
+    </article>
+
+    <section class="panel is-hidden" id="inquiry-section" aria-labelledby="inquiry-heading">
+      <h2 id="inquiry-heading">Contact the seller</h2>
+      <p id="inquiry-note" class="field-hint"></p>
+
+      <form id="inquiry-form" class="form-row" novalidate>
+        <div class="field">
+          <label for="inquiry-name">Your name</label>
+          <input type="text" id="inquiry-name" name="inquiry-name" maxlength="40">
+          <p class="error-message" id="error-inquiry-name" role="alert"></p>
+        </div>
+
+        <div class="field">
+          <label for="inquiry-email">Your email</label>
+          <input type="email" id="inquiry-email" name="inquiry-email" maxlength="60">
+          <p class="error-message" id="error-inquiry-email" role="alert"></p>
+        </div>
+
+        <div class="field field-wide">
+          <label for="inquiry-message">Message</label>
+          <textarea id="inquiry-message" name="inquiry-message" maxlength="500"></textarea>
+          <p class="error-message" id="error-inquiry-message" role="alert"></p>
+        </div>
+
+        <div class="field field-actions">
+          <button type="submit" class="button">Send inquiry</button>
+        </div>
+      </form>
+
+      <p class="badge badge-ok is-hidden" id="inquiry-success">
+        Your inquiry was sent to the seller.
+      </p>
+    </section>
+
+    <section class="panel is-hidden" id="report-section" aria-labelledby="report-heading">
+      <h2 id="report-heading">Is something wrong with this listing?</h2>
+      <p class="field-hint">A moderator checks reported listings and can remove them.</p>
+
+      <button type="button" class="button button-secondary" id="report-toggle"
+              aria-expanded="false" aria-controls="report-form">Report this listing</button>
+
+      <form id="report-form" class="form-row is-hidden" novalidate>
+        <div class="field field-wide">
+          <label for="report-reason">Why do you report it?</label>
+          <textarea id="report-reason" name="report-reason" maxlength="200"></textarea>
+          <p class="error-message" id="error-report-reason" role="alert"></p>
+        </div>
+
+        <div class="field field-actions">
+          <button type="submit" class="button button-danger">Send report</button>
+        </div>
+      </form>
+
+      <p class="badge badge-ok is-hidden" id="report-success">
+        Thank you, a moderator will look at this listing.
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>Campus Marketplace - student project, module B10 Web Application and Software Architecture.</p>
+    </div>
+  </footer>
+
+  <!-- jQuery first, then our own scripts: data layer, helpers, page logic. -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- If the CDN cannot be reached (no internet), load the local copy instead. -->
+  <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.7.1.min.js"><\/script>');</script>
+  <script src="js/seed-data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/page-listing.js"></script>
+
+</body>
+</html>
