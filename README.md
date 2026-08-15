@@ -10,7 +10,28 @@ jQuery. There is no backend and no database: the seed data comes from a JSON
 file and everything the user creates is stored in the browser with
 localStorage.
 
+## Live version
+
+* the site: <https://kawaggucci.github.io/campus-marketplace/>
+* the backend it talks to: <https://campus-marketplace-api.azurewebsites.net>
+  (documentation at `/docs`)
+
+The backend is a separate project:
+<https://github.com/kawaggucci/campus-marketplace-api>. It is an addition, not
+a requirement: the site works without it, see the next section.
+
 ## How to run
+
+There are three sources of data, and the application takes the first one that
+answers:
+
+1. the backend, when it is reachable. Then the data is stored on a server and
+   every change is sent there,
+2. `data/listings.json`, loaded with `$.getJSON`,
+3. the same listings as a plain array in `js/seed-data.js`.
+
+Which one was used is written to the browser console. The site is therefore
+complete on its own, with no server at all.
 
 ### 1. With a local web server (recommended)
 
