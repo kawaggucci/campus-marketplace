@@ -176,6 +176,10 @@ a:focus-visible,
   letter-spacing: 0.08em;
 }
 
+.account-role-current {
+  margin: 0 0 4px 0;
+}
+
 .account-panel {
   position: absolute;
   right: 0;

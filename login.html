@@ -33,7 +33,14 @@
           </button>
 
           <div class="account-panel is-hidden" id="account-panel">
-            <div class="field">
+            <!-- With a real account the role is only shown, with the offline
+                 demo session it can be switched. -->
+            <div class="is-hidden" id="account-role-line">
+              <p class="account-role-current">Role: <strong id="account-role-name"></strong></p>
+              <p class="field-hint">Your role belongs to your account and is checked by the server.</p>
+            </div>
+
+            <div class="field" id="role-switch-field">
               <label for="role-switch">Current role</label>
               <select id="role-switch">
                 <option value="visitor">Visitor</option>
@@ -57,32 +64,94 @@
     <div class="narrow-page">
       <h1>Log in</h1>
 
-      <section class="panel" aria-labelledby="login-heading">
-        <h2 id="login-heading">Choose a name and a role</h2>
-        <p class="field-hint">
-          This is a demo login without passwords. The name and the role are
-          stored in the browser and decide what the interface shows.
-        </p>
+      <!-- Shown when the backend answers: a real login with a password. -->
+      <section class="panel is-hidden" id="account-login" aria-labelledby="login-heading">
+        <h2 id="login-heading">Log in with your account</h2>
 
         <form id="login-form" autocomplete="off" novalidate>
           <div class="field">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="member-name" maxlength="20"
-                   autocomplete="off" placeholder="e.g. maria"
-                   aria-describedby="username-hint">
-            <p class="field-hint" id="username-hint">
-              Any name works. The demo listings belong to maria, jonas and aylin.
-            </p>
-            <p class="error-message" id="error-username" role="alert"></p>
+            <label for="login-username">Username</label>
+            <input type="text" id="login-username" name="login-name" maxlength="20" autocomplete="off">
+            <p class="error-message" id="error-login-username" role="alert"></p>
           </div>
 
           <div class="field">
-            <label for="role">Log in as</label>
-            <select id="role" name="role">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" name="login-password" maxlength="72" autocomplete="off">
+            <p class="error-message" id="error-login-password" role="alert"></p>
+          </div>
+
+          <div class="field-actions">
+            <button type="submit" class="button">Log in</button>
+            <a class="button button-secondary" href="index.html">Continue as visitor</a>
+          </div>
+        </form>
+
+        <p class="field-hint">
+          Accounts for trying it out: <strong>maria</strong>, <strong>jonas</strong> or
+          <strong>aylin</strong> with the password <strong>campus2026</strong>, and
+          <strong>moderator</strong> with the password <strong>moderate2026</strong>.
+        </p>
+      </section>
+
+      <section class="panel is-hidden" id="account-register" aria-labelledby="register-heading">
+        <h2 id="register-heading">Or create an account</h2>
+        <p class="field-hint">A new account is always a member. Moderators are set up by the site owner.</p>
+
+        <form id="register-form" autocomplete="off" novalidate>
+          <div class="field">
+            <label for="register-username">Username</label>
+            <input type="text" id="register-username" name="register-name" maxlength="20" autocomplete="off">
+            <p class="error-message" id="error-register-username" role="alert"></p>
+          </div>
+
+          <div class="field">
+            <label for="register-password">Password</label>
+            <input type="password" id="register-password" name="register-password" maxlength="72" autocomplete="off"
+                   aria-describedby="register-password-hint">
+            <p class="field-hint" id="register-password-hint">At least 8 characters.</p>
+            <p class="error-message" id="error-register-password" role="alert"></p>
+          </div>
+
+          <div class="field">
+            <label for="register-repeat">Repeat the password</label>
+            <input type="password" id="register-repeat" name="register-repeat" maxlength="72" autocomplete="off">
+            <p class="error-message" id="error-register-repeat" role="alert"></p>
+          </div>
+
+          <div class="field-actions">
+            <button type="submit" class="button">Create account</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Shown when the backend is not reachable: the demo role switch. -->
+      <section class="panel is-hidden" id="demo-login" aria-labelledby="demo-heading">
+        <h2 id="demo-heading">Choose a name and a role</h2>
+        <p class="field-hint">
+          The backend is not reachable, so the site runs on its own with the data
+          stored in this browser. There are no passwords in this mode: pick a name
+          and a role to see the interface through different eyes.
+        </p>
+
+        <form id="demo-form" autocomplete="off" novalidate>
+          <div class="field">
+            <label for="demo-username">Username</label>
+            <input type="text" id="demo-username" name="demo-name" maxlength="20"
+                   autocomplete="off" placeholder="e.g. maria"
+                   aria-describedby="demo-username-hint">
+            <p class="field-hint" id="demo-username-hint">
+              Any name works. The demo listings belong to maria, jonas and aylin.
+            </p>
+            <p class="error-message" id="error-demo-username" role="alert"></p>
+          </div>
+
+          <div class="field">
+            <label for="demo-role">Log in as</label>
+            <select id="demo-role" name="demo-role">
               <option value="member">Member</option>
               <option value="moderator">Moderator</option>
             </select>
-            <p class="field-hint">You can change the role later in the menu at the top right.</p>
           </div>
 
           <div class="field-actions">

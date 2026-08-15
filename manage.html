@@ -32,7 +32,14 @@
           </button>
 
           <div class="account-panel is-hidden" id="account-panel">
-            <div class="field">
+            <!-- With a real account the role is only shown, with the offline
+                 demo session it can be switched. -->
+            <div class="is-hidden" id="account-role-line">
+              <p class="account-role-current">Role: <strong id="account-role-name"></strong></p>
+              <p class="field-hint">Your role belongs to your account and is checked by the server.</p>
+            </div>
+
+            <div class="field" id="role-switch-field">
               <label for="role-switch">Current role</label>
               <select id="role-switch">
                 <option value="visitor">Visitor</option>

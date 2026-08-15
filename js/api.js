@@ -39,17 +39,19 @@ function apiBaseUrl() {
 --------------------------------------------------------------------------- */
 
 /*
-  Every request carries who is acting. There are no passwords in this project,
-  so these two headers are the stand in for a real login. The backend checks
-  the rules again on its side, which is the point: the browser decides what to
-  show, the server decides what is allowed.
+  Every request that needs an account carries the token that the backend
+  handed out at the login. Without a token the caller is a visitor, which is
+  enough for browsing and for writing to a seller.
+
+  The role is not sent at all. It belongs to the account in the database, and
+  the server reads it from there, so a client cannot claim to be a moderator.
 */
 function apiHeaders() {
-  const session = getSession();
-  return {
-    'X-Username': session.username,
-    'X-Role': session.role
-  };
+  const token = getToken();
+  if (!token) {
+    return {};
+  }
+  return { Authorization: 'Bearer ' + token };
 }
 
 function apiRequest(method, path, data) {
@@ -75,6 +77,24 @@ function apiCheckHealth() {
     method: 'GET',
     dataType: 'json',
     timeout: API_TIMEOUT
+  });
+}
+
+/* ---------------------------------------------------------------------------
+   Accounts
+--------------------------------------------------------------------------- */
+
+function apiLogin(username, password) {
+  return apiRequest('POST', '/api/auth/login', {
+    username: username,
+    password: password
+  });
+}
+
+function apiRegister(username, password) {
+  return apiRequest('POST', '/api/auth/register', {
+    username: username,
+    password: password
   });
 }
 

@@ -145,7 +145,21 @@ function initStore(onReady) {
 function handleApiAvailable() {
   usingApi = true;
   console.log('Data source: the backend at ' + apiBaseUrl() + '.');
+  dropSessionWithoutAccount();
   loadListingsFromApi();
+}
+
+/*
+  A session that was created in the offline demo mode has a name and a role,
+  but no token, so the backend would refuse every request it makes. As soon as
+  a backend is there, such a session is dropped and the user logs in properly.
+*/
+function dropSessionWithoutAccount() {
+  const session = getSession();
+  if (session.role !== 'visitor' && !session.token) {
+    console.log('The demo session has no account behind it, logging out.');
+    clearSession();
+  }
 }
 
 function handleApiMissing() {
@@ -564,8 +578,21 @@ function getSession() {
   return readObject(KEY_SESSION, GUEST_SESSION);
 }
 
-function setSession(username, role) {
-  saveObject(KEY_SESSION, { username: username, role: role });
+/*
+  The token is what the backend gave us at the login. It is stored with the
+  session and sent with every request that needs an account. Without a backend
+  there is no token, and the session is only the demo role switch.
+*/
+function getToken() {
+  return getSession().token || '';
+}
+
+function setSession(username, role, token) {
+  saveObject(KEY_SESSION, {
+    username: username,
+    role: role,
+    token: token || ''
+  });
 }
 
 function clearSession() {

@@ -28,7 +28,21 @@ function renderAccountArea() {
   $('#account-role').text(session.role);
   $('#role-switch').val(session.role);
 
+  showRoleSwitchState();
   applyRoleVisibility(session.role);
+}
+
+/*
+  The role switch is a demo tool for the offline mode. Somebody who is logged
+  in with a real account cannot pick a role, so they see it as plain text
+  instead of a dropdown that does nothing.
+*/
+function showRoleSwitchState() {
+  const hasAccount = getToken() !== '';
+
+  $('#account-role-name').text(capitalize(getSession().role));
+  $('#account-role-line').toggleClass('is-hidden', !hasAccount);
+  $('#role-switch-field').toggleClass('is-hidden', hasAccount);
 }
 
 // slideToggle is the visual effect from the jQuery lecture.
@@ -53,6 +67,11 @@ function handleAccountToggle() {
 function handleRoleChange(event) {
   const session = getSession();
   const newRole = $(event.currentTarget).val();
+
+  // With a real account the role is not the user's to choose.
+  if (getToken() !== '') {
+    return;
+  }
 
   if (newRole === 'visitor') {
     clearSession();
