@@ -6,7 +6,8 @@
   of store.js.
 */
 
-// Emoji instead of photos: the project does not handle image uploads.
+// Shown instead of a photo: for listings without one, and for every listing
+// while the site runs without the backend that stores the pictures.
 const CATEGORY_ICONS = {
   books: '📚',
   furniture: '🪑',
@@ -135,6 +136,48 @@ function isValidEmail(value) {
 --------------------------------------------------------------------------- */
 
 /*
+  The photo of a listing, or the category icon when there is none.
+
+  The photos belong to the data, so the backend serves them. Without a backend
+  there are no photos, and the icon of the category takes their place. That is
+  the same idea as everywhere else in this project: the site stays complete on
+  its own, it just shows less.
+
+  The file name ends up inside an HTML attribute, and a value like
+  x.jpg" onerror="alert(1) would break out of it. So the name is not escaped
+  but checked: only plain file names pass, anything else falls back to the
+  icon. Checking against a list of allowed characters is safer than trying to
+  clean a bad value.
+*/
+function buildListingMedia(listing, photoClass, iconClass) {
+  const source = listingPhotoUrl(listing);
+  if (!source) {
+    return '<p class="' + iconClass + '" aria-hidden="true">' + categoryIcon(listing.category) + '</p>';
+  }
+
+  return '<img class="' + photoClass + '" src="' + source +
+    '" alt="' + escapeHtml(listing.title) + '" loading="lazy">';
+}
+
+// Returns the address of the photo, or an empty string when there is none.
+function listingPhotoUrl(listing) {
+  if (!isUsingApi() || !isSafeImageName(listing.image)) {
+    return '';
+  }
+  return apiBaseUrl() + '/' + listing.image;
+}
+
+/*
+  A photo is either one that came with the project ("images/city-bike.jpg") or
+  one that a member uploaded ("uploads/listing-31.jpg"). Anything else is
+  refused: the value goes into an HTML attribute, and only these two shapes
+  are allowed to get there.
+*/
+function isSafeImageName(name) {
+  return typeof name === 'string' && /^(images|uploads)\/[a-z0-9-]+\.jpg$/.test(name);
+}
+
+/*
   Builds the markup of one listing card. Every piece of text that a user wrote
   (title, description, seller name) goes through escapeHtml first.
 
@@ -145,7 +188,7 @@ function buildListingCard(listing, options) {
   return '' +
     '<li class="card">' +
       '<article class="card-inner">' +
-        '<p class="card-media" aria-hidden="true">' + categoryIcon(listing.category) + '</p>' +
+        buildListingMedia(listing, 'card-photo', 'card-media') +
         '<div class="card-body">' +
           '<p class="card-label">' + escapeHtml(formatCategory(listing.category)) + '</p>' +
           '<h3 class="card-title">' +

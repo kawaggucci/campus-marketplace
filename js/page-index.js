@@ -17,9 +17,21 @@ function startListingsPage() {
   bindPageEvents();
   showSessionIntro();
 
+  showResetButton();
+
   // When the backend answers later and changes something, draw the list again.
   setStoreSyncHandler(renderResults);
   renderResults();
+}
+
+/*
+  "Reset demo data" only empties the storage of this browser. That restores
+  the seed listings while the site runs on its own, but with a backend the
+  data lives on the server, where this button cannot reach. It would look like
+  a restore and do nothing, so it is only shown in the offline mode.
+*/
+function showResetButton() {
+  $('#reset-demo-data').toggleClass('is-hidden', isUsingApi());
 }
 
 /* ---------------------------------------------------------------------------
@@ -224,7 +236,7 @@ function handleFavoriteClick(event) {
 }
 
 function handleResetDemoData() {
-  if (window.confirm('This deletes all listings, inquiries and favorites you created. Continue?')) {
+  if (window.confirm('This empties the storage of this browser and loads the demo listings again. Continue?')) {
     resetStore();
     window.location.reload();
   }

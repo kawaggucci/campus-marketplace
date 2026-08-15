@@ -180,6 +180,11 @@ a:focus-visible,
   margin: 0 0 4px 0;
 }
 
+/* Keeps the log out button away from the text above it. */
+.account-panel .button {
+  margin-top: var(--gap);
+}
+
 .account-panel {
   position: absolute;
   right: 0;
@@ -196,10 +201,12 @@ a:focus-visible,
    Main content and footer
 --------------------------------------------------------------------------- */
 
-/* Pages with a single column of content, for example the login page. */
+/* Pages with a single column of content, for example the login page. A form
+   with two or three short fields reads better in a narrow column than across
+   the whole page. */
 .narrow-page {
   width: 100%;
-  max-width: 520px;
+  max-width: 420px;
   margin: 0 auto;
 }
 
@@ -208,11 +215,20 @@ a:focus-visible,
   color: var(--ink-soft);
 }
 
-main {
-  padding: var(--gap-lg) 0 48px 0;
+/*
+  The pages use <main class="container">, and .container already sets padding
+  and margin. A rule for main alone would lose against it, because a class
+  weighs more than an element name. Naming both makes this rule the stronger
+  one.
+*/
+main.container {
+  padding-top: var(--gap-lg);
+  padding-bottom: var(--gap-lg);
 }
 
 .site-footer {
+  /* Space between the content and the dark bar. */
+  margin-top: calc(var(--gap-lg) * 2);
   background: var(--shell);
   padding: var(--gap-lg) 0;
   color: #a8a3b8;
@@ -243,6 +259,19 @@ main {
   margin-top: 0;
 }
 
+/* A button standing directly in a panel, for example "Report this listing",
+   needs room before whatever follows it. */
+.panel > .button {
+  margin-bottom: var(--gap);
+}
+
+/* Explaining text under a form or under a row of buttons, for example the
+   demo accounts listed below the login form. */
+form + .field-hint,
+.field-actions + .field-hint {
+  margin-top: var(--gap);
+}
+
 .panel-head {
   display: flex;
   flex-wrap: wrap;
@@ -270,11 +299,24 @@ main {
   gap: var(--gap);
 }
 
+/* A form that never becomes a row, for example on the login page, keeps the
+   same distance between its fields and above its buttons. */
+form:not(.form-row) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+/*
+  Stacked layout: the field is only as high as its content. The width rule
+  belongs to the row layout and lives in the media query at the end of the
+  file: inside a column, flex-basis would set the height of the field instead
+  of its width, which blows the form apart.
+*/
 .field {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  flex: 1 1 180px;
 }
 
 .field label {
@@ -290,10 +332,6 @@ main {
   align-items: flex-start;
 }
 
-/* A field that always takes a whole line, for example a textarea. */
-.field-wide {
-  flex: 1 1 100%;
-}
 
 input,
 select,
@@ -331,11 +369,17 @@ textarea:focus {
   border-color: var(--warn);
 }
 
+/* An empty message takes no room at all. It used to reserve one line so the
+   layout would not jump, but stacked forms then carried an empty line under
+   every single field. */
 .error-message {
   margin: 0;
-  min-height: 1.1em;
   color: var(--warn);
   font-size: 0.85rem;
+}
+
+.error-message:empty {
+  display: none;
 }
 
 /* ---------------------------------------------------------------------------
@@ -449,6 +493,17 @@ textarea:focus {
   border-radius: var(--radius) var(--radius) 0 0;
   font-size: 2.5rem;
   text-align: center;
+}
+
+/* The photos have different shapes, object-fit crops them to one frame
+   instead of squeezing them. */
+.card-photo {
+  display: block;
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
 }
 
 .card-body {
@@ -597,6 +652,16 @@ textarea:focus {
   text-align: center;
 }
 
+.detail-photo {
+  display: block;
+  width: 100%;
+  max-height: 380px;
+  object-fit: cover;
+  margin-bottom: var(--gap);
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
 .detail-price {
   margin: 0 0 4px 0;
   font-size: 1.3rem;
@@ -659,6 +724,17 @@ textarea:focus {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-start;
+  }
+
+  /* Now that the fields stand side by side, flex-basis sets their width:
+     at least 180px each, and they share the leftover space. */
+  .form-row .field {
+    flex: 1 1 180px;
+  }
+
+  /* A field that takes a whole line of its own, for example a textarea. */
+  .form-row .field-wide {
+    flex: 1 1 100%;
   }
 
   /* Every other field starts with a label, the button group does not. This

@@ -71,8 +71,10 @@
     <!-- The empty elements are filled by page-listing.js with .text(), so
          user written content can never become markup. -->
     <article class="panel is-hidden" id="listing-detail">
-      <p class="detail-media" id="detail-icon" aria-hidden="true"></p>
-      <h1 id="detail-title"></h1>
+      <!-- The photo or the category icon is built by page-listing.js, because
+           an img without a src is not valid HTML. -->
+      <div id="detail-media"></div>
+      <h1 id="detail-title">Listing</h1>
       <p class="detail-price" id="detail-price"></p>
       <p class="card-meta" id="detail-meta"></p>
       <p class="badge badge-warn is-hidden" id="detail-reported">Reported, waiting for a moderator</p>
@@ -118,6 +120,22 @@
       <p class="badge badge-ok is-hidden" id="inquiry-success">
         Your inquiry was sent to the seller.
       </p>
+    </section>
+
+    <!-- A moderator does not report a listing, they act on it directly. -->
+    <section class="panel is-hidden" id="moderate-section" aria-labelledby="moderate-heading">
+      <h2 id="moderate-heading">Moderation</h2>
+      <p class="field-hint" id="moderate-note"></p>
+
+      <div class="detail-actions">
+        <button type="button" class="button button-danger" id="remove-button">Remove this listing</button>
+        <button type="button" class="button button-secondary is-hidden" id="dismiss-report-button">
+          Dismiss the report
+        </button>
+        <a class="button button-secondary" href="moderator.html">Open the moderation queue</a>
+      </div>
+
+      <p class="badge badge-ok is-hidden" id="moderate-success"></p>
     </section>
 
     <section class="panel is-hidden" id="report-section" aria-labelledby="report-heading">

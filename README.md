@@ -5,63 +5,52 @@ Final project for the module **B10 Web Application and Software Architecture**
 campus community buys and sells used textbooks, furniture, bikes and
 electronics.
 
-The application is front end only. It is built with HTML, CSS, JavaScript and
-jQuery. There is no backend and no database: the seed data comes from a JSON
-file and everything the user creates is stored in the browser with
-localStorage.
+The application is front end only: HTML, CSS, JavaScript and jQuery, without a
+framework and without a build step. It works on its own, with the data in the
+browser. A backend exists as an addition and gives it a server, accounts and
+photos, but nothing here depends on it.
 
-## Live version
+## How to run it
 
-* the site: <https://kawaggucci.github.io/campus-marketplace/>
-* the backend it talks to: <https://campus-marketplace-api.azurewebsites.net>
-  (documentation at `/docs`)
+### 1. Open the published site
 
-The backend is a separate project:
-<https://github.com/kawaggucci/campus-marketplace-api>. It is an addition, not
-a requirement: the site works without it, see the next section.
+<https://kawaggucci.github.io/campus-marketplace/>
 
-## How to run
+This is the complete version: it talks to the backend at
+<https://campus-marketplace-api.azurewebsites.net>, so the listings have
+photos, accounts have passwords and the data is the same for every visitor.
+The backend is a separate project,
+<https://github.com/kawaggucci/campus-marketplace-api>, with its own README.
 
-There are three sources of data, and the application takes the first one that
-answers:
+### 2. Open index.html from the folder
 
-1. the backend, when it is reachable. Then the data is stored on a server and
-   every change is sent there,
-2. `data/listings.json`, loaded with `$.getJSON`,
-3. the same listings as a plain array in `js/seed-data.js`.
+Double click `index.html`. The page then runs on the `file://` protocol and
+uses the backend as well, as long as there is an internet connection.
 
-Which one was used is written to the browser console. The site is therefore
-complete on its own, with no server at all.
+Without one, the application falls back to the data that ships with it: the
+board is complete, the listings show the icon of their category instead of a
+photo, and the login page offers a plain role switch instead of a password.
 
-### 1. With a local web server (recommended)
+No local web server is needed for either way. Serving the folder with, for
+example, `python -m http.server 8000` also works and is what was used while
+developing, but it is not required to look at the project.
 
-Open a terminal in the project folder and start any static server, for example
-the one that comes with Python:
+## Where the data comes from
 
-    python -m http.server 8000
+The application tries three sources and takes the first one that answers.
+Which one it was is written to the browser console.
 
-Then open <http://localhost:8000> in the browser. The Live Server extension of
-VS Code or `php -S localhost:8000` work the same way.
+1. **the backend**, when it answers `GET /api/health`. It is then the source
+   of truth: every change is sent to it and the listings have photos,
+2. **`data/listings.json`**, loaded with `$.getJSON`. This is the AJAX way,
+   and it only works when the page is served over http, because browsers block
+   such a request from `file://`,
+3. **`js/seed-data.js`**, the same listings as a plain JavaScript array. This
+   is what a double clicked page without internet ends up with, so it is never
+   empty.
 
-This is the recommended way because the seed data is then loaded with
-`$.getJSON('data/listings.json')`, which is the normal AJAX path.
-
-### 2. By opening index.html directly
-
-Double clicking `index.html` also works. In that case the page runs on the
-`file://` protocol, where the browser blocks AJAX requests for security
-reasons (the request has no real origin, so it fails the CORS check).
-
-The application notices this: when `$.getJSON` fails, it falls back to the
-same data as a plain JavaScript array in `js/seed-data.js`. The page is never
-empty. Which of the two paths was used is written to the browser console:
-
-    Seed data: loaded from data/listings.json with $.getJSON.
-    Seed data: $.getJSON failed, used the fallback array from js/seed-data.js.
-
-jQuery is loaded from the CDN that was used in the course. If there is no
-internet connection, the local copy in `js/vendor/` is loaded instead, so the
-project also works offline.
+jQuery itself follows the same idea: it comes from the CDN used in the course,
+and if that cannot be reached, the local copy in `js/vendor/` is loaded.
 
 ## Roles and test users
 
@@ -175,4 +164,7 @@ happens when it is rendered.
   there is no transport to secure. In a real product it would be required.
 * The data is stored per browser. Another browser or another computer sees the
   seed data again, and clearing the browser storage deletes everything.
-* There are no image uploads. Every category is shown with an emoji instead.
+* Photos only exist together with the backend, because it stores them. A
+  member can upload one for their own listing, and the demo listings ship with
+  theirs. Without the backend, and for listings without a photo, the icon of
+  the category is shown instead.

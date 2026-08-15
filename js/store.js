@@ -312,7 +312,7 @@ function getReportedListings() {
 }
 
 // Create: push a new record and save the whole array back.
-function createListing(data) {
+function createListing(data, onSaved) {
   const listings = getListings();
   const listing = {
     id: nextId(listings),
@@ -329,17 +329,51 @@ function createListing(data) {
 
   if (usingApi) {
     // The backend gives the record its real id, so the local one is replaced
-    // as soon as the answer arrives and the page is drawn again.
+    // as soon as the answer arrives and the page is drawn again. onSaved runs
+    // at that moment, which is when the caller may use the real id.
     const temporaryId = listing.id;
     apiCreateListing(listing)
       .done(function (record) {
-        replaceListing(temporaryId, toFrontendListing(record));
+        const saved = toFrontendListing(record);
+        replaceListing(temporaryId, saved);
         notifyStoreSynced();
+        if (onSaved) {
+          onSaved(saved);
+        }
       })
       .fail(handleApiWriteFailed);
+  } else if (onSaved) {
+    onSaved(listing);
   }
 
   return listing;
+}
+
+/*
+  Sends the picture of a listing to the backend. The server checks it, cuts it
+  to shape and answers with the listing, now carrying the path of the photo.
+  onDone gets nothing when it worked, or the failed request when it did not.
+*/
+function saveListingPhoto(listingId, file, onDone) {
+  if (!usingApi) {
+    return;
+  }
+
+  apiUploadListingImage(listingId, file)
+    .done(function (record) {
+      const updated = toFrontendListing(record);
+      replaceListing(updated.id, updated);
+      notifyStoreSynced();
+      if (onDone) {
+        onDone(null);
+      }
+    })
+    .fail(function (request) {
+      handleApiWriteFailed(request);
+      if (onDone) {
+        onDone(request);
+      }
+    });
 }
 
 // Puts a record from the backend in the place of the local one.

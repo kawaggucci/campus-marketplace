@@ -138,6 +138,26 @@ function apiDeleteListing(id) {
   return apiRequest('DELETE', '/api/listings/' + Number(id));
 }
 
+/*
+  Uploading a picture is the one request that does not send JSON. The browser
+  packs the file itself, so contentType and processData are switched off and
+  jQuery passes the FormData through untouched.
+*/
+function apiUploadListingImage(id, file) {
+  const payload = new FormData();
+  payload.append('file', file);
+
+  return $.ajax({
+    url: apiBaseUrl() + '/api/listings/' + Number(id) + '/image',
+    method: 'POST',
+    headers: apiHeaders(),
+    data: payload,
+    processData: false,
+    contentType: false,
+    dataType: 'json'
+  });
+}
+
 function apiReportListing(id, reason) {
   return apiRequest('POST', '/api/listings/' + Number(id) + '/report', { reason: reason });
 }
@@ -190,6 +210,9 @@ function toFrontendListing(record) {
 
   if (record.report_reason) {
     listing.reportReason = record.report_reason;
+  }
+  if (record.image) {
+    listing.image = record.image;
   }
 
   return listing;

@@ -25,6 +25,7 @@ function startManagePage() {
   }
 
   $('#member-area').removeClass('is-hidden');
+  $('#photo-field').toggleClass('is-hidden', !isUsingApi());
   fillCategorySelect();
   bindPageEvents();
   startEditFromUrl(session);
@@ -210,8 +211,9 @@ function handleListingSubmit(event) {
 
   const session = getSession();
   const data = readListingForm();
+  const photo = readSelectedPhoto();
 
-  if (!isListingValid(data)) {
+  if (!isListingValid(data) || !isPhotoValid(photo)) {
     return;
   }
 
@@ -219,16 +221,70 @@ function handleListingSubmit(event) {
   data.price = Number(data.price);
 
   if (editingListingId) {
-    updateListing(editingListingId, data);
+    const listingId = editingListingId;
+    updateListing(listingId, data);
+    uploadPhoto(listingId, photo);
     showListingSuccess('The listing was updated.');
   } else {
     data.sellerId = session.username;
-    createListing(data);
+    // The picture can only be sent once the backend has given the listing its
+    // real id, which is what the second argument waits for.
+    createListing(data, function (saved) {
+      uploadPhoto(saved.id, photo);
+    });
     showListingSuccess('The listing is online now.');
   }
 
   stopEditing();
   renderAllSections(session);
+}
+
+/* ---------------------------------------------------------------------------
+   The photo of a listing
+--------------------------------------------------------------------------- */
+
+// The file input holds a list, we take the first entry or nothing.
+function readSelectedPhoto() {
+  const input = document.getElementById('listing-photo');
+  if (!input || !input.files || input.files.length === 0) {
+    return null;
+  }
+  return input.files[0];
+}
+
+// A quick answer in the browser. The server checks the same things again,
+// and it checks the content, which the browser cannot do here.
+function isPhotoValid(photo) {
+  if (!photo) {
+    return true;
+  }
+  if (photo.size > 3 * 1024 * 1024) {
+    showFieldError('listing-photo', 'The picture is larger than 3 MB.');
+    return false;
+  }
+  if (photo.type !== 'image/jpeg' && photo.type !== 'image/png') {
+    showFieldError('listing-photo', 'Please choose a JPEG or a PNG picture.');
+    return false;
+  }
+  return true;
+}
+
+function uploadPhoto(listingId, photo) {
+  if (!photo) {
+    return;
+  }
+  saveListingPhoto(listingId, photo, handlePhotoUploadDone);
+}
+
+function handlePhotoUploadDone(problem) {
+  if (!problem) {
+    showListingSuccess('The listing was saved and the picture was uploaded.');
+    return;
+  }
+
+  const answer = problem.responseJSON;
+  const reason = answer && answer.detail ? answer.detail : 'The picture could not be uploaded.';
+  showFieldError('listing-photo', reason);
 }
 
 function readListingForm() {

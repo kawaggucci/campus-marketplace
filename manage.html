@@ -93,6 +93,18 @@
             <p class="error-message" id="error-listing-price" role="alert"></p>
           </div>
 
+          <!-- Only shown when the backend is there, because it is the one
+               that stores the picture. -->
+          <div class="field field-wide is-hidden" id="photo-field">
+            <label for="listing-photo">Photo</label>
+            <input type="file" id="listing-photo" name="listing-photo"
+                   accept="image/jpeg,image/png" aria-describedby="photo-hint">
+            <p class="field-hint" id="photo-hint">
+              Optional. JPEG or PNG, up to 3 MB. The server cuts it to the shape of the cards.
+            </p>
+            <p class="error-message" id="error-listing-photo" role="alert"></p>
+          </div>
+
           <div class="field field-wide">
             <label for="listing-description">Description</label>
             <textarea id="listing-description" name="listing-description" maxlength="500"></textarea>

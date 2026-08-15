@@ -47,6 +47,8 @@ function bindPageEvents() {
   $('#inquiry-form').on('submit', handleInquirySubmit);
   $('#report-toggle').on('click', handleReportToggle);
   $('#report-form').on('submit', handleReportSubmit);
+  $('#remove-button').on('click', handleRemoveClick);
+  $('#dismiss-report-button').on('click', handleDismissReportClick);
 }
 
 /* ---------------------------------------------------------------------------
@@ -56,7 +58,7 @@ function bindPageEvents() {
 function renderListing(listing) {
   const session = getSession();
 
-  $('#detail-icon').text(categoryIcon(listing.category));
+  renderListingPhoto(listing);
   $('#detail-title').text(listing.title);
   $('#detail-price').text(formatPrice(listing.price));
   $('#detail-meta').text(
@@ -72,6 +74,16 @@ function renderListing(listing) {
   renderFavoriteButton(listing, session);
   renderInquirySection(listing, session);
   renderReportSection(listing, session);
+  renderModerateSection(listing, session);
+}
+
+/*
+  The photo comes from the backend, see listingPhotoUrl in ui.js. Without a
+  backend the category icon takes its place. The same builder as on the cards
+  is used, only with the classes of the detail page.
+*/
+function renderListingPhoto(listing) {
+  $('#detail-media').html(buildListingMedia(listing, 'detail-photo', 'detail-media'));
 }
 
 // Only the member who wrote the listing may edit it.
@@ -112,11 +124,37 @@ function renderInquirySection(listing, session) {
   $('#inquiry-note').text('The seller sees your message and your email address.');
 }
 
-// A listing that is already reported cannot be reported a second time, and
-// nobody reports their own listing.
+/*
+  A listing that is already reported cannot be reported a second time, and
+  nobody reports their own listing. A moderator does not report either: they
+  see the moderation panel instead and act right away.
+*/
 function renderReportSection(listing, session) {
-  const canReport = !isListingOwner(listing, session) && listing.status === 'active';
+  const canReport = session.role !== 'moderator' &&
+    !isListingOwner(listing, session) &&
+    listing.status === 'active';
+
   $('#report-section').toggleClass('is-hidden', !canReport);
+}
+
+// The panel a moderator sees on every listing that is still online.
+function renderModerateSection(listing, session) {
+  const isModerator = session.role === 'moderator';
+  $('#moderate-section').toggleClass('is-hidden', !isModerator);
+
+  if (!isModerator) {
+    return;
+  }
+
+  $('#dismiss-report-button').toggleClass('is-hidden', listing.status !== 'reported');
+  $('#moderate-note').text(describeModerationState(listing));
+}
+
+function describeModerationState(listing) {
+  if (listing.status === 'reported') {
+    return 'This listing was reported. Reason: ' + (listing.reportReason || 'no reason given');
+  }
+  return 'Nobody reported this listing. You can still take it off the board if it breaks the rules.';
 }
 
 /* ---------------------------------------------------------------------------
@@ -131,6 +169,36 @@ function handleFavoriteClick() {
 
   const nowFavorite = toggleFavorite(session.username, currentListingId);
   $('#favorite-button').text(favoriteButtonLabel(nowFavorite));
+}
+
+/* ---------------------------------------------------------------------------
+   Moderator actions
+--------------------------------------------------------------------------- */
+
+function handleRemoveClick() {
+  const listing = getListingById(currentListingId);
+  if (!listing) {
+    return;
+  }
+  if (!window.confirm('Remove "' + listing.title + '" from the marketplace?')) {
+    return;
+  }
+
+  removeListing(listing.id);
+  showModerationDone('The listing was removed and is not visible to users any more.');
+}
+
+function handleDismissReportClick() {
+  clearReport(currentListingId);
+  showModerationDone('The report was dismissed, the listing stays online.');
+  $('#detail-reported').addClass('is-hidden');
+  $('#dismiss-report-button').addClass('is-hidden');
+}
+
+function showModerationDone(message) {
+  $('#moderate-success').text(message).removeClass('is-hidden').hide().fadeIn(250);
+  $('#moderate-note').text('');
+  $('#remove-button').addClass('is-hidden');
 }
 
 /* ---------------------------------------------------------------------------
