@@ -65,11 +65,24 @@ project also works offline.
 
 ## Roles and test users
 
-There is no real authentication. `login.html` is a role switch: it stores a
-name and a role in localStorage and the interface changes accordingly. After
-the login the header shows an account button on the right. It opens a small
-menu where the role can be changed at any time, which makes it quick to see
-the same page through the eyes of each role.
+The login page works in two modes, depending on whether the backend answers.
+
+**With the backend.** A real login: the password is checked against a stored
+hash on the server, and the answer is a token that the site sends with every
+request. The role belongs to the account, so the header only shows it as text.
+Accounts for trying it out:
+
+| Username | Password | Role |
+|---|---|---|
+| `maria`, `jonas`, `aylin` | `campus2026` | member |
+| `moderator` | `moderate2026` | moderator |
+
+New accounts can be created on the login page and are always members.
+
+**Without the backend.** There is nothing to check a password against, so the
+page falls back to a demo role switch: pick any name and any role. The account
+menu in the header then lets the role be changed at any time, which makes it
+quick to see the same page through the eyes of each role.
 
 | Role | What it can do | How to try it |
 |---|---|---|
